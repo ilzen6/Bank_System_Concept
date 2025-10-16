@@ -9,7 +9,7 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedSourcePolicy = ReportingPolicy.WARN,
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.WARN,
         uses = {AccountMapper.class, CardMapper.class})
 public interface CustomerMapper {
     @Mapping(target = "fullName", expression = "java(buildFullName(customer))")
@@ -49,17 +49,9 @@ public interface CustomerMapper {
 
     List<CustomerResponse> toResponseList(List<Customer> customers);
     default String buildFullName(Customer customer) {
-        if (customer.getMiddleName() != null) {
-            customer.setFullName(customer.getFirstName() + " " +
-                    customer.getMiddleName() + " " + customer.getLastName());
-        } else customer.setFullName(customer.getFirstName() + " " + customer.getLastName());
-
-        return customer.getFullName();
+        if (customer.getMiddleName() != null && !customer.getMiddleName().isEmpty()) {
+            return customer.getFirstName() + " " + customer.getMiddleName() + " " + customer.getLastName();
+        }
+        return customer.getFirstName() + " " + customer.getLastName();
     }
-
-
-
-
-
-
 }
