@@ -19,6 +19,7 @@ import com.example.BankSystem.repository.AccountRepository;
 import com.example.BankSystem.repository.CardRepository;
 import com.example.BankSystem.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.NotFound;
 import org.springframework.stereotype.Service;
@@ -28,26 +29,16 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CustomerService {
-    private CustomerRepository customerRepository;
-    private AccountRepository accountRepository;
-    private CardRepository cardRepository;
-    private CustomerMapper customerMapper;
-    private AccountMapper accountMapper;
-    private CardMapper cardMapper;
+    private final CustomerRepository customerRepository;
+    private final AccountRepository accountRepository;
+    private final CardRepository cardRepository;
+    private final CustomerMapper customerMapper;
+    private final AccountMapper accountMapper;
+    private final CardMapper cardMapper;
 
-    public CustomerService(CustomerRepository customerRepository,
-                           AccountRepository accountRepository,
-                           CardRepository cardRepository,
-                           CustomerMapper customerMapper,
-                           AccountMapper accountMapper, CardMapper cardMapper) {
-        this.customerRepository = customerRepository;
-        this.accountRepository = accountRepository;
-        this.cardRepository = cardRepository;
-        this.customerMapper = customerMapper;
-        this.accountMapper = accountMapper;
-        this.cardMapper = cardMapper;
-    }
+
 
     @Transactional
     public CustomerDetailResponse registerCustomer(CreateCustomerRequest request) {
@@ -97,7 +88,7 @@ public class CustomerService {
         Customer customer = customerRepository.findById(id).orElseThrow(
                 () -> new CustomerNotFoundException("Customer not found with id: " + id)
         );
-        List<Account> activeAccounts = accountRepository.findAllByStatus(AccountStatus.ACTIVE);
+        List<Account> activeAccounts = accountRepository.findAllByCustomerIdAndStatus(id, AccountStatus.ACTIVE);
         if (!(activeAccounts.isEmpty())) {
             throw new InvalidOperationException("Cannot delete customer" +
                     " with active accounts. Customer ID: " + id);

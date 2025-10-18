@@ -28,7 +28,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findAllByTransactionTypeAndStatus(TransactionType type, TransactionStatus status);
     List<Transaction> findAllByTransactionDateAfter(LocalDateTime date);
     List<Transaction> findAllByTransactionDateBetween(LocalDateTime start, LocalDateTime end);
-    List<Transaction> findAllByFromAccountIdOrToAccountIdOrderByTransactionDateDesc(Long fromId, Long toId);
+    List<Transaction> findByFromAccountIdOrToAccountIdOrderByTransactionDateDesc(Long fromId, Long toId);
     List<Transaction> findAllByAmountGreaterThan(BigDecimal amount);
     List<Transaction> findAllByAmountBetween(BigDecimal min, BigDecimal max);
     long countByFromAccountId(Long accountId);
