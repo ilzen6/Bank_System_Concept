@@ -39,7 +39,7 @@ public interface AccountMapper {
     @Mapping(target = "outgoingTransactions", ignore = true)
     @Mapping(target = "incomingTransactions", ignore = true)
     @Mapping(target = "balance", constant = "0")
-    @Mapping(target = "status", constant = "AccountStatus.ACTIVE")
+    @Mapping(target = "status", constant = "ACTIVE")
     @Mapping(target = "openDate", expression = "java(LocalDate.now())")
     Account toEntity(CreateAccountRequest request);
 
